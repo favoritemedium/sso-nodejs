@@ -4,6 +4,7 @@
   "description": "Implement SSO in nodejs",
   "main": "index.js",
   "scripts": {
+    "start": "node --harmony index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Hu.Ziming (ziming@favoritemedium.com)",
