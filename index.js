@@ -23,3 +23,5 @@ app.on('error', function(err,ctx){
 
 app.listen(3000);
 
+// vim: expandtab:ts=2:sw=2
+

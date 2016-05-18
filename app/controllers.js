@@ -48,3 +48,5 @@ ctrl.hellp = function *(next) {
 
 module.exports = ctrl;
 
+// vim: expandtab:ts=2:sw=2
+

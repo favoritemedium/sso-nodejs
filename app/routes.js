@@ -10,3 +10,5 @@ router.post('/auth', ctrl.auth);
 
 module.exports = router;
 
+// vim: expandtab:ts=2:sw=2
+//
