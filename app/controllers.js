@@ -1,6 +1,6 @@
 var ctrl = {};
 
-ctrl.auth = function *(next){
+ctrl.auth = function *(next) {
   // Pass email
   this.checkBody('email').optional().isEmail('Please enter correct email');
   this.checkBody('password').optional().notEmpty();
