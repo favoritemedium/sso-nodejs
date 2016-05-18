@@ -5,8 +5,8 @@ var router = new Router({
   prefix: '/api/auth'
 });
 
-
 router.post('/auth', ctrl.auth);
+router.get('/foobar', ctrl.hello);
 
 module.exports = router;
 
