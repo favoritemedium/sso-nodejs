@@ -15,10 +15,10 @@ app.use(router.allowedMethods());
 require('koa-validate')(app);
 
 app.on('error', function(err,ctx){
-    if (process.env.NODE_ENV != 'test') {
-        console.log(err.message);
-        console.log(err);
-    }
+  if (process.env.NODE_ENV != 'test') {
+    console.log(err.message);
+    console.log(err);
+  }
 });
 
 app.listen(3000);

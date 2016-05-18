@@ -2,7 +2,7 @@ var ctrl = require('./controllers');
 var Router = require('koa-router');
 
 var router = new Router({
-    prefix: '/api/auth'
+  prefix: '/api/auth'
 });
 
 
