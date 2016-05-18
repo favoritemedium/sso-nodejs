@@ -24,17 +24,21 @@ ctrl.auth = function *(next){
   var id_token = this.checkBody('id_token').value;
 
   if ((typeof email !== 'undefined') && (typeof password !== 'undefined')) {
-    // Auth with email
-    // TODO: Query EmailAuth table with email and password
-    // TODO: Signin user, generate tokens and return ok if verified
-    // TODO: Return error if not verified
+    if (auth_by_email_password(email, password)) {
+      signin(email, password);
+    } else {
+      // TODO: Return error
+    }
   } else if (typeof rtoken !== 'undefined') {
-    // Auth with refresh token
-    // TODO: Find refresh token in Token table
+    if (auth_by_refresh_token(rtoken)) {
+    } else {
+    }
     // TODO: Signin user, generate tokens and return ok if verified
     // TODO: Return error if not verified
   } else if ((typeof provider !== 'undefined') && (typeof id_token !== 'undefined')) {
-    // Auth with SNS provider
+    if (auth_by_provider_token(rtoken)) {
+    } else {
+    }
   } else {
     console.log('----------');
     this.body = { 'error': 'Params error!' }
@@ -44,6 +48,31 @@ ctrl.auth = function *(next){
 
 ctrl.hellp = function *(next) {
   this.body = "Hello What?"
+
+/////////////////////////////
+// Help functions
+/////////////////////////////
+
+// Auth by email and password
+auth_by_email_password = function(email, password) {
+  // TODO: Query EmailAuth table with email and password
+  return true;
+}
+
+// Auth by refresh token
+auth_by_refresh_token = function(refresh_token) {
+  // TODO: Find refresh token in Token table
+  return true;
+}
+
+// Auth by provider and id_token
+auth_by_provider_token = function(provider, id_token) {
+  // TODO: Find refresh token in SnsAuth table
+  return true;
+}
+
+signin = function(email, password) {
+  // TODO: Signin user, generate tokens
 }
 
 module.exports = ctrl;
