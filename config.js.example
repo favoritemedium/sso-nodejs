@@ -1,0 +1,6 @@
+module.exports = {
+  pg_connect_str: 'postgres://<username>:<password>@<server>:<port>/<db>'
+}
+
+// vim: expandtab:ts=2:sw=2
+
