@@ -46,8 +46,13 @@ ctrl.auth = function *(next){
   }
 }
 
-ctrl.hellp = function *(next) {
-  this.body = "Hello What?"
+ctrl.hello = function *(next) {
+  console.log(this.pg);
+  var result = yield this.pg.db.client.query_('SELECT now()');
+  console.log('result:', result);
+
+  this.body = result.rows[0].now.toISOString()
+}
 
 /////////////////////////////
 // Help functions
