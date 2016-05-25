@@ -39,10 +39,22 @@ EmailAuthSchema.methods.comparePassword = function *(candidate_pwd) {
 
 EmailAuthSchema.methods.refreshTokens = function *() {
   // 1. Find or create Member record
-  var member = yield Member.findOne({email: this.email});
-  console.log(member);
+  var member = yield this.member();
+
   // 2. Find or create associated Token record
   // 3. Refresh token
+  var tokens = yield member.sign_in();
+
+  return tokens
+}
+
+EmailAuthSchema.methods.member = function *() {
+  var member = yield Member.findOne({auth_records: this.id});
+  if (!member) {
+    var member = yield Member.create({email: this.email, auth_records: [this.id]});
+  }
+
+  return member;
 }
 
 EmailAuthSchema.statics.matchRecord = function *(email, password) {
