@@ -36,17 +36,11 @@ router.post('/auth', passport.authenticate('local', {
   failureRedirect: '/api/auth/auth',
   session:false
 }), function*(next) {
-  this.body = "LOGGED IN as " + this.req.user.id;
-  //this.redirect("/api/auth/success?id=" + this.req.user._id);
+  var member = yield this.req.user.member();
+  var tokens = yield this.req.user.refreshTokens();
+  var response_json = Object.assign({}, member.toJSON(), tokens)
+  this.body = response_json;
 });
-
-router.get('/success',
-  //passport.authenticate('bearer', { session: false }),
-  function *(next) {
-    console.log(this.req)
-    this.body = "LOGGED IN as " + this.req.user.id;
-  }
-);
 
 
 app.on('error', function(err,ctx){
