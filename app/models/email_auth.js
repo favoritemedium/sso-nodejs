@@ -1,3 +1,5 @@
+'use strict';
+
 var co = require('co');
 var bcrypt = require('co-bcrypt');
 var mongoose = require('mongoose');

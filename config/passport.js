@@ -1,3 +1,5 @@
+'use strict';
+
 var LocalStrategy = require('passport-local').Strategy;
 var EmailAuth = require('mongoose').model('EmailAuth');
 var Member = require('mongoose').model('Member');
