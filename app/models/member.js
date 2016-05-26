@@ -34,7 +34,12 @@ MemberSchema.methods.sign_in = function *(candidate_pwd) {
   return yield token_rcd.reload_tokens();
 }
 
-MemberSchema.methods.validate_token = function *(access_token) {
+MemberSchema.statics.find_by_token = function *(access_token) {
+  var token_rcd = yield Token.findOne({access_token: access_token});
+  if (!token_rcd) {
+    return null
+  }
+  return this.findById(token_rcd.member_id);
 }
 
 module.exports = mongoose.model('Member', MemberSchema);

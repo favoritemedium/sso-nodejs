@@ -24,7 +24,8 @@ mongoose.connection.on('error', function (err) {
     console.log(err);
 });
 
-const EmailAuth = require('./app/models/email_auth.js')
+const EmailAuth = require('./app/models/email_auth')
+const Member = require('./app/models/member')
 
 
 // Routes
@@ -40,6 +41,12 @@ router.post('/auth', passport.authenticate('local', {
   var tokens = yield this.req.user.refreshTokens();
   var response_json = Object.assign({}, member.toJSON(), tokens)
   this.body = response_json;
+});
+
+router.post('/verify', function *() {
+  var access_token = this.request.body.access_token;
+  var member = yield Member.find_by_token(access_token);
+  this.body = member.toJSON();
 });
 
 
