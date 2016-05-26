@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-const Member = require('./member.js')
 const Token = require('./token.js')
 
 // User schema, contains user detail info, and link to multi auth records
