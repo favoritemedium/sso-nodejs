@@ -8,10 +8,21 @@ var Schema = mongoose.Schema;
 const Member = require('./member.js')
 
 var EmailAuthSchema = new Schema({
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  member_id: {
+    type: Schema.ObjectId,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
 }, {
-  toJSON : {
+  toJSON: {
     transform: function (doc, ret, options) {
       delete ret.password;
     }
@@ -23,7 +34,7 @@ EmailAuthSchema.pre('save', function (done) {
     return done();
   }
 
-  co.wrap( function *() {
+  co.wrap(function* () {
     try {
       var salt = yield bcrypt.genSalt();
       var hash = yield bcrypt.hash(this.password, salt);
@@ -35,11 +46,11 @@ EmailAuthSchema.pre('save', function (done) {
   }).call(this, done);
 });
 
-EmailAuthSchema.methods.comparePassword = function *(candidate_pwd) {
+EmailAuthSchema.methods.comparePassword = function* (candidate_pwd) {
   return yield bcrypt.compare(candidate_pwd, this.password);
 }
 
-EmailAuthSchema.methods.refreshTokens = function *() {
+EmailAuthSchema.methods.refreshTokens = function* () {
   // 1. Find or create Member record
   var member = yield this.member();
 
@@ -63,16 +74,16 @@ EmailAuthSchema.methods.createMember = function* () {
   return member;
 }
 
-EmailAuthSchema.statics.matchRecord = function *(email, password) {
-  var rcd = yield this.findOne({'email': email}).exec();
+EmailAuthSchema.statics.matchRecord = function* (email, password) {
+  var rcd = yield this.findOne({
+    'email': email
+  });
+
   if (rcd && (yield rcd.comparePassword(password))) {
     return rcd;
   }
-
-  throw new Error ('Auth error, please check input')
 }
 
 module.exports = mongoose.model('EmailAuth', EmailAuthSchema);
 
 // vim: expandtab:ts=2:sw=2
-
