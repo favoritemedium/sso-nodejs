@@ -18,37 +18,13 @@ app.use(bodyParser());
 require('koa-validate')(app);
 require('./config/passport')(passport, config);
 
+var router = require('./app/routes')(app, Router, passport)
+
 // Connect to DB
 mongoose.connect(config.mongo_connect_str);
 mongoose.connection.on('error', function (err) {
-    console.log(err);
+  console.log(err);
 });
-
-const EmailAuth = require('./app/models/email_auth')
-const Member = require('./app/models/member')
-
-
-// Routes
-var router = new Router({
-  prefix: '/api/auth'
-});
-
-router.post('/auth', passport.authenticate('local', {
-  failureRedirect: '/api/auth/auth',
-  session:false
-}), function*(next) {
-  var member = yield this.req.user.member();
-  var tokens = yield this.req.user.refreshTokens();
-  var response_json = Object.assign({}, member.toJSON(), tokens)
-  this.body = response_json;
-});
-
-router.post('/verify', function *() {
-  var access_token = this.request.body.access_token;
-  var member = yield Member.find_by_token(access_token);
-  this.body = member.toJSON();
-});
-
 
 app.on('error', function(err,ctx){
   if (process.env.NODE_ENV != 'test') {
@@ -59,11 +35,10 @@ app.on('error', function(err,ctx){
 
 app.use(passport.initialize());
 app.use(router.routes());
-//app.use(router.middleware());
+app.use(router.middleware());
 app.use(router.allowedMethods());
 
 
 app.listen(3000);
 
 // vim: expandtab:ts=2:sw=2
-
