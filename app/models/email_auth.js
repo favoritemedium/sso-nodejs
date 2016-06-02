@@ -50,12 +50,16 @@ EmailAuthSchema.methods.refreshTokens = function *() {
   return tokens
 }
 
-EmailAuthSchema.methods.member = function *() {
-  var member = yield Member.findOne({auth_records: this.id});
-  if (!member) {
-    var member = yield Member.create({email: this.email, auth_records: [this.id]});
-  }
+EmailAuthSchema.methods.member = function* () {
+  return yield Member.findById(this.member_id);
+}
 
+EmailAuthSchema.methods.createMember = function* () {
+  var member = yield Member.create({
+    email: this.email
+  });
+  this.member_id = member.id;
+  yield this.save();
   return member;
 }
 
