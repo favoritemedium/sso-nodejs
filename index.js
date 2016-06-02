@@ -4,6 +4,7 @@ var koa = require('koa');
 var Router = require('koa-router');
 var logger = require('koa-logger');
 var mongoose = require('mongoose');
+var session = require('koa-session');
 var passport = require('koa-passport');
 var bodyParser = require('koa-bodyparser');
 
@@ -12,7 +13,10 @@ var app = module.exports = koa();
 var config = require('./config/app');
 var ctrl = require('./app/controllers')
 
+app.keys = [config.session_key]
+
 app.use(logger());
+app.use(session(app));
 app.use(bodyParser());
 
 require('koa-validate')(app);
