@@ -7,11 +7,16 @@ const Token = require('./token.js')
 
 // User schema, contains user detail info, and link to multi auth records
 var MemberSchema = new Schema({
-  auth_records: [Schema.ObjectId],
-  email: { type: String, required: true, unique: true, lowercase: true },
-  full_name: { type: String },
+  email: {
+    type: String,
+    unique: true,
+    lowercase: true
+  },
+  full_name: {
+    type: String
+  },
 }, {
-  toJSON : {
+  toJSON: {
     transform: function (doc, ret, options) {
       ret.id = ret._id;
       delete ret._id;
@@ -21,8 +26,10 @@ var MemberSchema = new Schema({
   }
 });
 
-MemberSchema.methods.sign_in = function *(candidate_pwd) {
-  var token_rcd = yield Token.findOne({member_id: this.id});
+MemberSchema.methods.sign_in = function* (candidate_pwd) {
+  var token_rcd = yield Token.findOne({
+    member_id: this.id
+  });
   if (!token_rcd) {
     var token_rcd = yield Token.create({
       member_id: this.id,
@@ -33,11 +40,13 @@ MemberSchema.methods.sign_in = function *(candidate_pwd) {
     });
   }
 
-  return yield token_rcd.reload_tokens();
+  return yield token_rcd.reloadTokens();
 }
 
-MemberSchema.statics.find_by_token = function *(access_token) {
-  var token_rcd = yield Token.findOne({access_token: access_token});
+MemberSchema.statics.findByToken = function* (access_token) {
+  var token_rcd = yield Token.findOne({
+    access_token: access_token
+  });
   if (!token_rcd) {
     return null
   }
@@ -47,4 +56,3 @@ MemberSchema.statics.find_by_token = function *(access_token) {
 module.exports = mongoose.model('Member', MemberSchema);
 
 // vim: expandtab:ts=2:sw=2
-

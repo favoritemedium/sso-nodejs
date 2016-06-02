@@ -30,7 +30,7 @@ mongoose.connection.on('error', function (err) {
   console.log(err);
 });
 
-app.on('error', function(err,ctx){
+app.on('error', function (err, ctx) {
   if (process.env.NODE_ENV != 'test') {
     console.log(err.message);
     console.log(err);
