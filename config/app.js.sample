@@ -1,9 +1,13 @@
 module.exports = {
   mongo_connect_str: '<server>/<db>',
   salt_work_factor: 10,
+  session_key: '<Your session key>',
+  allowed_providers: [
+    'google',
+    'facebook'
+  ]
   access_token_expire_second: 7200, // 2 hours
   refresh_token_expire_second: 604800 // 1 week
 }
 
 // vim: expandtab:ts=2:sw=2
-
