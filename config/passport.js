@@ -30,9 +30,7 @@ module.exports = function (passport, config) {
   passport.deserializeUser(deserialize);
   passport.use(new LocalStrategy({
     usernameField: 'email',
-    session: false
   }, AuthLocalUser));
 }
 
 // vim: expandtab:ts=2:sw=2
-
