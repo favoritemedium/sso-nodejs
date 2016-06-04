@@ -21,7 +21,7 @@ module.exports = function (app, Router, passport) {
   router.post('/signin',
     ctrl.authParams,
     ctrl.updateSession,
-    ctrl.returnMemberInfo);
+    ctrl.processSuccessfulSignin);
 
   // Sign out user, clear session and invalid auth token if provided
   // Params:
