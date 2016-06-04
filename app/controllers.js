@@ -115,12 +115,16 @@ module.exports = function (app, passport) {
     }
   }
 
-  ctrl.signOut = function *() {
+  ctrl.signOut = function* () {
     this.checkBody('access_token').optional();
     // TODO: Find session and clear it
     var access_token = this.checkBody('access_token').value;
     if (typeof access_token !== 'undefined') {
-      yield Token.update({access_token: access_token}, {disabled: true});
+      yield Token.update({
+        access_token: access_token
+      }, {
+        disabled: true
+      });
       this.body = 'ok'
     }
   }
