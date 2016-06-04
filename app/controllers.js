@@ -5,7 +5,7 @@ const Token = require('./models/token')
 const SnsAuth = require('./models/sns_auth')
 const Member = require('./models/member')
 
-var returnMemberInfo = function* (next, user, signin_method) {
+var memberInfo = function* (next, user, signin_method) {
   var member = yield user.member();
   if (!member) {
     if (signin_method !== 'refresh_token') {
@@ -104,7 +104,7 @@ module.exports = function (app, passport) {
     console.log(this.is('json'));
     console.log(this.is('application/x-www-form-urlencoded'));
     if (this.is('json')) {
-      this.body = yield returnMemberInfo(next, this.user, this.signin_method);
+      this.body = yield memberInfo(next, this.user, this.signin_method);
     } else if (this.is('text/html', 'application/x-www-form-urlencoded')) {
       var target_url = this.checkBody('redirect_to').value;
       if (target_url) {
