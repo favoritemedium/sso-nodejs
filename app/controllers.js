@@ -5,6 +5,26 @@ const Token = require('./models/token')
 const SnsAuth = require('./models/sns_auth')
 const Member = require('./models/member')
 
+var returnMemberInfo = function* (next, user, signin_method) {
+  var member = yield user.member();
+  if (!member) {
+    if (signin_method !== 'refresh_token') {
+      return {
+        email: this.user.email,
+        name: this.user.name,
+        new_member: true
+      }
+    } else {
+      member = yield user.createMember();
+      var tokens = yield user.refreshTokens();
+      return Object.assign({}, member.toJSON(), tokens);
+    }
+  } else {
+    var tokens = yield user.refreshTokens();
+    return Object.assign({}, member.toJSON(), tokens);
+  }
+}
+
 module.exports = function (app, passport) {
   var ctrl = {};
 
@@ -80,19 +100,17 @@ module.exports = function (app, passport) {
     yield next;
   }
 
-  ctrl.returnMemberInfo = function* (next) {
-    var member = yield this.user.member();
-    if (!member) {
-      if (this.signin_method !== 'refresh_token') {
-        this.body = {
-          email: this.user.email,
-          name: this.user.name,
-          new_member: true
-        }
+  ctrl.processSuccessfulSignin = function* (next) {
+    console.log(this.is('json'));
+    console.log(this.is('application/x-www-form-urlencoded'));
+    if (this.is('json')) {
+      this.body = yield returnMemberInfo(next, this.user, this.signin_method);
+    } else if (this.is('text/html', 'application/x-www-form-urlencoded')) {
+      var target_url = this.checkBody('redirect_to').value;
+      if (target_url) {
+        this.redirect(target_url)
       } else {
-        member = yield this.user.createMember();
-        var tokens = yield this.user.refreshTokens();
-        this.body = Object.assign({}, member.toJSON(), tokens);
+        this.body = 'ok'
       }
     }
   }
