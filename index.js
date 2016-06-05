@@ -38,6 +38,7 @@ app.on('error', function (err, ctx) {
 });
 
 app.use(passport.initialize());
+app.use(passport.session());
 app.use(router.routes());
 app.use(router.middleware());
 app.use(router.allowedMethods());

@@ -123,12 +123,12 @@ module.exports = function (app, passport) {
 
   ctrl.updateSession = function* (next) {
     console.log('Update session');
+    yield this.login(this.user);
+    console.log(this.isAuthenticated());
     yield next;
   }
 
   ctrl.processSuccessfulSignin = function* (next) {
-    console.log(this.is('json'));
-    console.log(this.is('application/x-www-form-urlencoded'));
     if (this.is('json')) {
       this.body = yield memberInfo(next, this.user, this.signin_method);
     } else if (this.is('text/html', 'application/x-www-form-urlencoded')) {
