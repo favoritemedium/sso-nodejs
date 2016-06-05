@@ -28,6 +28,32 @@ var memberInfo = function* (next, user, signin_method) {
 module.exports = function (app, passport) {
   var ctrl = {};
 
+  ctrl.sso = function* (next) {
+    var access_token = this.checkBody('access_token').value;
+    var redirect_to = this.checkBody('redirect_to').value;
+
+    if (typeof access_token !== 'undefined') {
+      // Validate token
+      var current_epoch_seconds = new Date().getTime() / 1000;
+      var token_rcd = yield Token.findOne({
+        access_token: access_token,
+        access_token_expire_at: {
+          $gt: current_epoch_seconds
+        }
+      });
+
+      if (token_rcd) {
+        if (redirect_to) {
+          this.redirect(redirect_to);
+        } else {
+          this.body = 'ok'
+        }
+      } else {
+        this.status = 401;
+      }
+    }
+  }
+
   ctrl.authParams = function* (next) {
     // Pass email
     this.checkBody('email').optional().isEmail('Please enter correct email');

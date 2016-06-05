@@ -6,6 +6,8 @@ module.exports = function (app, Router, passport) {
     prefix: '/api/auth'
   });
 
+  router.get('/sso', ctrl.sso)
+
   // Sign in user
   // Params (select one from three):
   //  - email / password
