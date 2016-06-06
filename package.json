@@ -8,6 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Hu.Ziming (ziming@favoritemedium.com)",
+  "repository": "git@github.com:favoritemedium/sso-nodejs.git",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^0.8.6",
