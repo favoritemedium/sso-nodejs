@@ -33,7 +33,7 @@ module.exports = function (app, passport) {
     var redirect_to = this.checkBody('redirect_to').value;
 
     if (typeof access_token !== 'undefined') {
-      // Validate token
+      // Token based auth
       var current_epoch_seconds = new Date().getTime() / 1000;
       var token_rcd = yield Token.findOne({
         access_token: access_token,
@@ -43,6 +43,8 @@ module.exports = function (app, passport) {
       });
 
       if (token_rcd) {
+        // TODO: Check whether can reuse this logic
+        // ? Change redirect to into a next function?
         if (redirect_to) {
           this.redirect(redirect_to);
         } else {
