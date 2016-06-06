@@ -49,7 +49,25 @@ module.exports = function (app, passport) {
           this.body = 'ok'
         }
       } else {
+        if (this.is('json')) {
+          this.status = 401;
+        } else if (this.is('text/html', 'application/x-www-form-urlencoded')) {
+          this.redirect('/api/auth/signin');
+        }
         this.status = 401;
+      }
+    } else if (this.isAuthenticated()) {
+      // Cookie based auth
+      if (redirect_to) {
+        this.redirect(redirect_to);
+      } else {
+        this.body = 'ok'
+      }
+    } else {
+      if (this.is('json')) {
+        this.status = 401;
+      } else if (this.is('text/html', 'application/x-www-form-urlencoded')) {
+        this.redirect('/api/auth/signin');
       }
     }
   }
